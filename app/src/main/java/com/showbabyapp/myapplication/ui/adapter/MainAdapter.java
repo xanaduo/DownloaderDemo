@@ -32,64 +32,51 @@ import com.showbabyapp.myapplication.bean.AppliInfo;
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private AppliInfo appliInfo;
+    private AppliInfo appliInfo = new AppliInfo();
 
+    public void setData(AppliInfo data) {
+        this.appliInfo = data;
+        //notifyDataSetChanged();
+    }
 
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
+        private AppliInfo.Appli appli;
 
         public ViewHolder(View v) {
             super(v);
-            // Define click listener for the ViewHolder's View.
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Element " + getPosition() + " clicked.");
+                    Log.d(TAG, appli.name + "/" + appli.url);
                 }
             });
             textView = (TextView) v.findViewById(R.id.textView);
         }
 
-        public TextView getTextView() {
-            return textView;
+        public void initData(AppliInfo.Appli appli) {
+            this.appli = appli;
+            textView.setText(appli.name);
         }
     }
 
-
-    /**
-     * Initialize the dataset of the Adapter.
-     */
-    public MainAdapter(AppliInfo appliInfo) {
-        this.appliInfo = appliInfo;
-    }
-
-
-    // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
-
         return new ViewHolder(v);
     }
 
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Log.d(TAG, "Element " + position + " set.");
-
-        // Get element from your dataset at this position and replace the contents of the view
-        // with that element
-        viewHolder.getTextView().setText(appliInfo.data.get(position).name);
+        viewHolder.initData(appliInfo.data.get(position));
     }
 
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return appliInfo.data.size();

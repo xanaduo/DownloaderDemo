@@ -12,11 +12,10 @@ import org.xutils.XutilsCallback;
  * Created by 秀宝-段誉 on 2016-06-05.
  * 邮箱：xanaduo@qq.com
  */
-public class RankModel implements IBaseModel<AppliInfo, AppliInfo> {
-    private String url = "http://api.stay4it.com/v1/public/core/?service=downloader.applist";
+public class RankModel implements IBaseModel<String, AppliInfo> {
 
     @Override
-    public void load(AppliInfo appliInfo, final ModelListener<AppliInfo> listener) {
+    public void load(String url, final ModelListener<AppliInfo> listener) {
         SXutilsRequest.post(url, new XutilsCallback<String>() {
             @Override
             public void success(String s) {

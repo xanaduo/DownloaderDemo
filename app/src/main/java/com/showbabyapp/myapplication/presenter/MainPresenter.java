@@ -10,7 +10,8 @@ import com.showbabyapp.myapplication.view.IBaseView;
  * Created by 秀宝-段誉 on 2016-06-04 11:27.
  */
 public class MainPresenter extends BasePresenter<IBaseView> {
-    private IBaseModel<AppliInfo, AppliInfo> model;
+    private IBaseModel<String, AppliInfo> model;
+    private String url = "http://api.stay4it.com/v1/public/core/?service=downloader.applist";
 
     public MainPresenter(IBaseView viewRef) {
         super(viewRef);
@@ -19,7 +20,7 @@ public class MainPresenter extends BasePresenter<IBaseView> {
 
     public void load() {
         getView().loadView();
-        model.load(null, new ModelListener<AppliInfo>() {
+        model.load(url, new ModelListener<AppliInfo>() {
             @Override
             public void onSuccess(AppliInfo result) {
                 getView().successView(result);
@@ -41,4 +42,5 @@ public class MainPresenter extends BasePresenter<IBaseView> {
             }
         });
     }
+
 }

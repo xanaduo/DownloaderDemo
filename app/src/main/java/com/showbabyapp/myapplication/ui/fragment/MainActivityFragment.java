@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.google.common.base.Preconditions;
 import com.showbabyapp.myapplication.R;
 import com.showbabyapp.myapplication.bean.AppliInfo;
 import com.showbabyapp.myapplication.presenter.MainPresenter;
+import com.showbabyapp.myapplication.ui.adapter.Adapter;
 import com.showbabyapp.myapplication.ui.adapter.MainAdapter;
 import com.showbabyapp.myapplication.view.IBaseView;
 
@@ -32,6 +34,9 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
     private static final int SPAN_COUNT = 2;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected LayoutManagerType mCurrentLayoutManagerType;
+    private MainAdapter adapter;
+    private Adapter adapter1;
+    private ListView lv_content;
 
     @Override
     protected MainPresenter createPresenter() {
@@ -51,6 +56,7 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         rv_content = (RecyclerView) view.findViewById(R.id.rv_content);
+        lv_content = (ListView) view.findViewById(R.id.lv_content);
         rb_list = (RadioButton) view.findViewById(R.id.rb_list);
         rb_list.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +84,10 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        adapter = new MainAdapter();
+        rv_content.setAdapter(adapter);
+        /*adapter1 = new Adapter();
+        lv_content.setAdapter(adapter1);*/
         presenter.load();
     }
 
@@ -90,8 +100,8 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
 
     @Override
     public void successView(AppliInfo data) {
-        MainAdapter adapter = new MainAdapter(data);
-        rv_content.setAdapter(adapter);
+        adapter.setData(data);
+        setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
     }
 
     @Override
