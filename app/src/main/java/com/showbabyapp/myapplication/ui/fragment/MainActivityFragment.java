@@ -2,8 +2,8 @@ package com.showbabyapp.myapplication.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,16 +15,15 @@ import android.widget.Toast;
 
 import com.google.common.base.Preconditions;
 import com.showbabyapp.myapplication.R;
+import com.showbabyapp.myapplication.bean.AppliInfo;
+import com.showbabyapp.myapplication.presenter.MainPresenter;
 import com.showbabyapp.myapplication.ui.adapter.MainAdapter;
 import com.showbabyapp.myapplication.view.IBaseView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements IBaseView<String> {
+public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresenter> implements IBaseView<AppliInfo> {
 
     private ProgressDialog dialog;
     private RecyclerView rv_content;
@@ -33,6 +32,11 @@ public class MainActivityFragment extends Fragment implements IBaseView<String> 
     private static final int SPAN_COUNT = 2;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected LayoutManagerType mCurrentLayoutManagerType;
+
+    @Override
+    protected MainPresenter createPresenter() {
+        return new MainPresenter(this);
+    }
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -62,29 +66,46 @@ public class MainActivityFragment extends Fragment implements IBaseView<String> 
                 setRecyclerViewLayoutManager(LayoutManagerType.GRID_LAYOUT_MANAGER);
             }
         });
+        view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.load();
+            }
+        });
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        presenter.load();
+    }
+
+    @Override
+    public void loadView() {
         dialog = new ProgressDialog(this.getActivity());
         dialog.show();
+        SystemClock.sleep(1000);
     }
 
     @Override
-    public void refreshView(String data) {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 30; i++)
-            list.add(i + data);
-        MainAdapter adapter = new MainAdapter(list);
+    public void successView(AppliInfo data) {
+        MainAdapter adapter = new MainAdapter(data);
         rv_content.setAdapter(adapter);
-        dialog.dismiss();
     }
 
     @Override
-    public void errorView(Throwable throwable) {
+    public void emptyView() {
+        Toast.makeText(this.getContext(), "没有任何数据", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void failureView(Throwable throwable) {
         Toast.makeText(this.getActivity(), Preconditions.checkNotNull(throwable).toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void finishView() {
         dialog.dismiss();
     }
 

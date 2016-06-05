@@ -6,9 +6,6 @@ import org.xutils.common.Callback;
 
 public abstract class XutilsCallback<Result> implements Callback.CommonCallback<Result>, INetCallback<Result> {
 
-    public void finish() {
-    }
-
     @Override
     public void onSuccess(Result result) {
         success(result);

@@ -16,6 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rv_content"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刷新"
+        android:id="@+id/button" />
+
     <RadioButton
         android:id="@+id/rb_grid"
         android:text="表格展示"

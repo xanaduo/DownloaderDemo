@@ -2,10 +2,17 @@ package com.showbabyapp.myapplication.view;
 
 /**
  * Created by 秀宝-段誉 on 2016-06-04 13:32.
+ *
+ *  View接口，Data是界面展示的数据
  */
-public interface IBaseView<Result> {
+public interface IBaseView<Data> {
+    void loadView();
 
-    void refreshView(Result data);
+    void successView(Data data);
 
-    void errorView(Throwable throwable);
+    void emptyView();
+
+    void failureView(Throwable throwable);
+
+    void finishView();
 }

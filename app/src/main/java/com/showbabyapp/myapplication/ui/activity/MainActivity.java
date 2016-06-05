@@ -10,15 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.showbabyapp.myapplication.R;
-import com.showbabyapp.myapplication.presenter.MainPresenter;
-import com.showbabyapp.myapplication.ui.fragment.MainActivityFragment;
-
-import org.xutils.x;
 
 public class MainActivity extends AppCompatActivity {
-
-    private MainPresenter mainPresenter;
-    String url = "http://www.showbabybox.com/ARShowServer1.0/product_findProduct.do?pdata={\"appkey\":\"1806978425\",\"signature\":\"a249e60cd9f77abcfbe14a039591fe3825b20546\",\"timestamp\":\"1465035200\",\"sts\":\"\",\"model\":\"android\",\"rmk\":\"\",\"apkVersion\":\"1.2.7\",\"registerID\":null,\"biz\":[{\"bname\":\"\",\"mname\":\"\",\"title\":\"\",\"type\":0,\"aid\":\"\",\"limit\":12,\"start\":0}]}";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +28,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-
-        x.Ext.init(getApplication());
-
-        MainActivityFragment fragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-
-        mainPresenter = new MainPresenter(fragment);
-        loadData();
-    }
-
-    void loadData() {
-        mainPresenter.load(url);
     }
 
     @Override

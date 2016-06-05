@@ -24,8 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.showbabyapp.myapplication.R;
-
-import java.util.List;
+import com.showbabyapp.myapplication.bean.AppliInfo;
 
 /**
  * Provide views to RecyclerView with data from list.
@@ -33,7 +32,7 @@ import java.util.List;
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private List<String> list;
+    private AppliInfo appliInfo;
 
 
     /**
@@ -63,8 +62,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     /**
      * Initialize the dataset of the Adapter.
      */
-    public MainAdapter(List<String> list) {
-        this.list = list;
+    public MainAdapter(AppliInfo appliInfo) {
+        this.appliInfo = appliInfo;
     }
 
 
@@ -86,13 +85,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.getTextView().setText(list.get(position));
+        viewHolder.getTextView().setText(appliInfo.data.get(position).name);
     }
 
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return list.size();
+        return appliInfo.data.size();
     }
 }
