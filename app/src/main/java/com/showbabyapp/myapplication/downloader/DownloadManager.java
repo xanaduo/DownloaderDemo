@@ -107,10 +107,10 @@ public class DownloadManager {
     }
 
     /**
-     * @param pid
+     * @param url
      */
-    public DownloadInfo queryDownloadInfo(String pid) {
-        return DataChanger.getInstance(context).queryDownloadInfoById(pid);
+    public DownloadInfo queryDownloadInfo(String url) {
+        return DataChanger.getInstance(context).queryDownloadInfo(url);
     }
 
     /**
@@ -125,5 +125,9 @@ public class DownloadManager {
      */
     public void pauseAll() {
         loadIntent(null, DownloadInfo.VALUE_DOWNLOAD_ACTION_PAUSE_ALL);
+    }
+
+    public boolean containsDownloadEntry(String downloadUrl) {
+        return DataChanger.getInstance(context).containsDownloadEntry(downloadUrl);
     }
 }

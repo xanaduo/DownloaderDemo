@@ -25,42 +25,25 @@ import android.widget.TextView;
 
 import com.showbabyapp.myapplication.R;
 import com.showbabyapp.myapplication.bean.AppliInfo;
+import com.showbabyapp.myapplication.bean.DownloadInfo;
+import com.showbabyapp.myapplication.bean.DownloadState;
+import com.showbabyapp.myapplication.downloader.DownloadManager;
 
 /**
  * Provide views to RecyclerView with data from list.
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
+    private static DownloadManager manager;
+    private AppliInfo appliInfo;
 
-    private AppliInfo appliInfo = new AppliInfo();
+    public MainAdapter(DownloadManager manager) {
+        this.manager = manager;
+    }
 
     public void setData(AppliInfo data) {
         this.appliInfo = data;
         //notifyDataSetChanged();
-    }
-
-    /**
-     * Provide a reference to the type of views that you are using (custom ViewHolder)
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-        private AppliInfo.Appli appli;
-
-        public ViewHolder(View v) {
-            super(v);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, appli.name + "/" + appli.url);
-                }
-            });
-            textView = (TextView) v.findViewById(R.id.textView);
-        }
-
-        public void initData(AppliInfo.Appli appli) {
-            this.appli = appli;
-            textView.setText(appli.name);
-        }
     }
 
     @Override
@@ -79,6 +62,38 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
+        if (appliInfo == null)
+            return 0;
         return appliInfo.data.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView textView;
+        private AppliInfo.Appli appli;
+        private DownloadInfo info;
+
+        public ViewHolder(View v) {
+            super(v);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, appli.name + "/" + appli.url);
+                    if (info.downloadState == DownloadState.WAITING || info.downloadState == DownloadState.FINISHED) {
+                        manager.start(info);
+                    } else if (info.downloadState == DownloadState.STARTED || info.downloadState == DownloadState.WAITING) {
+                        manager.pause(info);
+                    } else if (info.downloadState == DownloadState.STOPPED) {
+                        manager.resume(info);
+                    }
+                }
+            });
+            textView = (TextView) v.findViewById(R.id.textView);
+        }
+
+        public void initData(AppliInfo.Appli appli) {
+            this.appli = appli;
+            textView.setText(appli.name);
+            info = manager.containsDownloadEntry(appli.url) ? manager.queryDownloadInfo(appli.url) : appli.generateDownloadInfo();
+        }
     }
 }

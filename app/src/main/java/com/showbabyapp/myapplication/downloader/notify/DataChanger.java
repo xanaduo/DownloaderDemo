@@ -83,14 +83,18 @@ public class DataChanger extends Observable {
     /**
      * 根据id获取
      *
-     * @param id
+     * @param url
      * @return
      */
-    public DownloadInfo queryDownloadInfoById(String id) {
-        return opraterMap.get(id);
+    public DownloadInfo queryDownloadInfo(String url) {
+        return opraterMap.get(url);
     }
 
     public void addToDownloadMap(String key, DownloadInfo value) {
         opraterMap.put(key, value);
+    }
+
+    public boolean containsDownloadEntry(String id) {
+        return opraterMap.containsKey(id);
     }
 }

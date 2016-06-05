@@ -17,5 +17,13 @@ public class AppliInfo {
         public String size;
         public String icon;
         public String url;
+
+        public DownloadInfo generateDownloadInfo() {
+            DownloadInfo info = new DownloadInfo();
+            info.pid = url;
+            info.fileName = name;
+            info.downloadUrl = url;
+            return info;
+        }
     }
 }

@@ -17,6 +17,9 @@ import android.widget.Toast;
 import com.google.common.base.Preconditions;
 import com.showbabyapp.myapplication.R;
 import com.showbabyapp.myapplication.bean.AppliInfo;
+import com.showbabyapp.myapplication.bean.DownloadInfo;
+import com.showbabyapp.myapplication.downloader.DownloadManager;
+import com.showbabyapp.myapplication.downloader.notify.DataWatcher;
 import com.showbabyapp.myapplication.presenter.MainPresenter;
 import com.showbabyapp.myapplication.ui.adapter.Adapter;
 import com.showbabyapp.myapplication.ui.adapter.MainAdapter;
@@ -37,6 +40,7 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
     private MainAdapter adapter;
     private Adapter adapter1;
     private ListView lv_content;
+    private DownloadManager manager;
 
     @Override
     protected MainPresenter createPresenter() {
@@ -46,9 +50,6 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
         LINEAR_LAYOUT_MANAGER
-    }
-
-    public MainActivityFragment() {
     }
 
     @Override
@@ -84,7 +85,8 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new MainAdapter();
+        this.manager = DownloadManager.getInstance(this.getContext());
+        adapter = new MainAdapter(manager);
         rv_content.setAdapter(adapter);
         /*adapter1 = new Adapter();
         lv_content.setAdapter(adapter1);*/
@@ -150,4 +152,23 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
         rv_content.setLayoutManager(mLayoutManager);
         rv_content.scrollToPosition(scrollPosition);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.manager.addObserver(watcher);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        this.manager.deleteObserver(watcher);
+    }
+
+    private DataWatcher watcher = new DataWatcher() {
+        @Override
+        protected void notifyUpdate(DownloadInfo downloadInfo) {
+            adapter.notifyDataSetChanged();
+        }
+    };
 }

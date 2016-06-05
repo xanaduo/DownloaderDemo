@@ -12,7 +12,6 @@ import com.showbabyapp.myapplication.common.db.ArshowDbManager;
 import com.showbabyapp.myapplication.downloader.notify.DataChanger;
 
 import org.xutils.ex.DbException;
-import org.xutils.x;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +19,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
-
-import static com.showbabyapp.myapplication.bean.DownloadState.STOPPED;
 
 /**
  * Created by 秀宝-段誉 on 2016/5/13 12:49.
@@ -70,7 +67,7 @@ public class DownloadService extends Service {
                         info.downloadState = DownloadState.STOPPED;
                         addTask(info);
                     }
-                    changer.addToDownloadMap(info.pid, info);
+                    changer.addToDownloadMap(info.downloadUrl, info);
                 }
             }
         } catch (DbException e) {
@@ -160,7 +157,7 @@ public class DownloadService extends Service {
      * @param downloadInfo
      */
     private void cancelDownload(DownloadInfo downloadInfo) {
-        task = taskMap.remove(downloadInfo.pid);
+        task = taskMap.remove(downloadInfo.downloadUrl);
         if (task != null) {
             task.cancel();
         } else {
@@ -185,7 +182,7 @@ public class DownloadService extends Service {
      * @param downloadInfo
      */
     private void pauseDownload(DownloadInfo downloadInfo) {
-        task = taskMap.remove(downloadInfo.pid);
+        task = taskMap.remove(downloadInfo.downloadUrl);
         if (task != null)
             task.pause();
         else {
@@ -202,7 +199,7 @@ public class DownloadService extends Service {
      */
     private void startDownload(DownloadInfo downloadInfo) {
         DownloadTask task = new DownloadTask(downloadInfo, handler);
-        taskMap.put(downloadInfo.pid, task);
+        taskMap.put(downloadInfo.downloadUrl, task);
         cachedThreadPool.execute(task);
     }
 
@@ -232,7 +229,7 @@ public class DownloadService extends Service {
     }
 
     private void removeTask(DownloadInfo downloadInfo) {
-        task = taskMap.remove(downloadInfo.pid);
+        task = taskMap.remove(downloadInfo.downloadUrl);
         if (task != null) {
             switch (downloadInfo.downloadState) {
                 case STOPPED:
