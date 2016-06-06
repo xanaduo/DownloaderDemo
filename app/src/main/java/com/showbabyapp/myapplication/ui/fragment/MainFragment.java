@@ -24,12 +24,12 @@ import com.showbabyapp.myapplication.downloader.notify.DataWatcher;
 import com.showbabyapp.myapplication.presenter.MainPresenter;
 import com.showbabyapp.myapplication.ui.adapter.Adapter;
 import com.showbabyapp.myapplication.ui.adapter.MainAdapter;
-import com.showbabyapp.myapplication.view.IBaseView;
+import com.showbabyapp.myapplication.view.IDefaultView;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresenter> implements IBaseView<AppliInfo> {
+public class MainFragment extends MVPBaseFragment<MainPresenter> implements IDefaultView<AppliInfo, MainPresenter> {
 
     private ProgressDialog dialog;
     private RecyclerView rv_content;
@@ -44,8 +44,8 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
     private DownloadManager manager;
 
     @Override
-    protected MainPresenter createPresenter() {
-        return new MainPresenter(this);
+    public void setPresenter(MainPresenter presenter) {
+        this.presenter = presenter;
     }
 
     private enum LayoutManagerType {
@@ -91,7 +91,6 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
         rv_content.setAdapter(adapter);
         /*adapter1 = new Adapter();
         lv_content.setAdapter(adapter1);*/
-        presenter.load();
     }
 
     @Override
@@ -157,6 +156,7 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
     @Override
     public void onResume() {
         super.onResume();
+        presenter.load();
         this.manager.addObserver(watcher);
     }
 

@@ -4,17 +4,18 @@ import com.showbabyapp.myapplication.bean.AppliInfo;
 import com.showbabyapp.myapplication.model.IBaseModel;
 import com.showbabyapp.myapplication.model.ModelListener;
 import com.showbabyapp.myapplication.model.rank.RankModel;
-import com.showbabyapp.myapplication.view.IBaseView;
+import com.showbabyapp.myapplication.view.IDefaultView;
 
 /**
  * Created by 秀宝-段誉 on 2016-06-04 11:27.
  */
-public class MainPresenter extends BasePresenter<IBaseView> {
+public class MainPresenter extends BasePresenter<IDefaultView> {
     private IBaseModel<String, AppliInfo> model;
     private String url = "http://api.stay4it.com/v1/public/core/?service=downloader.applist";
 
-    public MainPresenter(IBaseView viewRef) {
+    public MainPresenter(IDefaultView viewRef) {
         super(viewRef);
+        viewRef.setPresenter(this);
         model = new RankModel();
     }
 

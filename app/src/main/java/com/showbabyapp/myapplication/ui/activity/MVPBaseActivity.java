@@ -19,6 +19,11 @@ public abstract class MVPBaseActivity<V, P extends BasePresenter<V>> extends App
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         this.presenter = createPresenter();
     }
 
