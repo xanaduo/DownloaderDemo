@@ -17,7 +17,6 @@
 package com.showbabyapp.myapplication.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ import com.showbabyapp.myapplication.downloader.DownloadManager;
  * Provide views to RecyclerView with data from list.
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
-    private static final String TAG = "CustomAdapter";
     private static DownloadManager manager;
     private AppliInfo appliInfo;
 
@@ -77,8 +75,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, appli.name + "/" + appli.url);
-                    if (info.downloadState == DownloadState.WAITING || info.downloadState == DownloadState.FINISHED) {
+                    if (info.downloadState == null || info.downloadState == DownloadState.WAITING) {
                         manager.start(info);
                     } else if (info.downloadState == DownloadState.STARTED || info.downloadState == DownloadState.WAITING) {
                         manager.pause(info);

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -169,6 +170,7 @@ public class MainActivityFragment extends MVPBaseFragment<IBaseView, MainPresent
         @Override
         protected void notifyUpdate(DownloadInfo downloadInfo) {
             adapter.notifyDataSetChanged();
+            Log.i("notifyUpdate", downloadInfo.toString());
         }
     };
 }

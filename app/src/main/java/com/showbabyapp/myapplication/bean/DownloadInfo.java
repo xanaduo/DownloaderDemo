@@ -111,6 +111,16 @@ public class DownloadInfo implements Parcelable {
         return (int) (id ^ (id >>> 32));
     }
 
+
+    @Override
+    public String toString() {
+        return "DownloadInfo{" +
+                "progress=" + progress +
+                ", fileLength=" + fileLength +
+                ", fileName='" + fileName + '\'' +
+                '}';
+    }
+
     @Override
     public int describeContents() {
         return 0;
